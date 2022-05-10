@@ -36,34 +36,35 @@ public class ChangeCalculator {
     public static int calculateChange(int cents) {
         // Implement a recursive solution following the given documentation.
         combinations.clear() ;
-        recursiveChange(cents, 0, 0 , 0, cents) ;
+        recursiveChange(cents, new int[] {0, 0, 0, cents}) ;
         return combinations.size() ;
     }
 
-   public static void recursiveChange(int total, int numQ, int numD, int numN, int numP) {
+   public static void recursiveChange(int total, int[] coinsUsed) {
 
         //base case, do nothing
-        if(DENOMINATIONS[0] * numQ +
-                DENOMINATIONS[1] * numD +
-                DENOMINATIONS[2] * numN +
-                DENOMINATIONS[3] * numP != total) {
+        if(DENOMINATIONS[0] * coinsUsed[0] +
+                DENOMINATIONS[1] * coinsUsed[1] +
+                DENOMINATIONS[2] * coinsUsed[2] +
+                DENOMINATIONS[3] * coinsUsed[3] != total) {
             return ;
         }
 
-        String calculatedCombo = "[ " + numQ + "Q " + numD + "D " + numN + "N " + numP + "P" + " ]" ;
+        String calculatedCombo =
+                "[ " + coinsUsed[0] + "Q " + coinsUsed[1] + "D " + coinsUsed[2] + "N " + coinsUsed[3] + "P" + " ]" ;
 
         if(!combinations.contains(calculatedCombo)) {
             combinations.add(calculatedCombo) ;
         }
 
-       if (numP >= 5) {
-           recursiveChange(total, numQ, numD, numN + 1, numP - 5) ;
+       if (coinsUsed[3] >= 5) {
+           recursiveChange(total, new int[] {coinsUsed[0], coinsUsed[1], coinsUsed[2] + 1, coinsUsed[3] - 5});
        }
-       if (numP >= 10) {
-           recursiveChange(total, numQ, numD + 1, numN, numP - 10);
+       if (coinsUsed[3] >= 10) {
+           recursiveChange(total, new int[] {coinsUsed[0], coinsUsed[1] + 1, coinsUsed[2], coinsUsed[3] - 10});
        }
-       if (numP >= 25) {
-           recursiveChange(total, numQ + 1, numD, numN, numP - 25);
+       if (coinsUsed[3] >= 25) {
+           recursiveChange(total, new int[] {coinsUsed[0] + 1, coinsUsed[1], coinsUsed[2], coinsUsed[3] - 25});
        }
 
    }
